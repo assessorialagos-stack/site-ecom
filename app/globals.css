@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ===== Base clara ===== */
+  --color-background: #FFFFFF;
+  --color-section: #F6F7FB;      /* seção alternada */
+  --color-section-2: #EEF1F8;
+  --color-card: #FFFFFF;
+  --color-foreground: #0B0C14;   /* títulos */
+  --color-body: #4A4F63;         /* texto corrido */
+  --color-muted: #80859A;        /* texto de apoio */
+  --color-border: #E3E5EF;
+  --color-border-strong: #C9CDDD;
+  --color-ink: #0B0C14;
+
+  /* ===== Azul Lagos ===== */
+  --color-accent: #3B6BFF;
+  --color-accent-hover: #2A52CC;
+  --color-accent-light: #8FB4FF;
+  --color-accent-soft: #EEF3FF;
+  --color-accent-line: #DCE6FF;
+
+  /* ===== Seções escuras ===== */
+  --color-dark: #08090F;
+  --color-dark-2: #10121B;
+  --color-dark-3: #171A26;
+  --color-dark-text: #A9AEC2;
+  --color-dark-muted: #7C8297;
+
+  /* ===== Estados ===== */
+  --color-whatsapp: #25D366;
+  --color-success: #11994A;
+  --color-success-soft: #E8FAEF;
+  --color-danger: #E5484D;
+  --color-danger-soft: #FFF0F0;
+  --color-warning: #F5A524;
+
+  --shadow-soft: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --shadow-card: 0 12px 32px -12px rgba(16, 24, 40, 0.18), 0 4px 10px -4px rgba(16, 24, 40, 0.06);
+  --shadow-float: 0 30px 60px -20px rgba(20, 30, 80, 0.28), 0 10px 24px -10px rgba(20, 30, 80, 0.12);
+  --shadow-accent: 0 10px 24px -10px rgba(59, 107, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-bob: bob 6s ease-in-out infinite;
+  --animate-orbit: orbit 60s linear infinite;
+  --animate-ring: ring 2.4s ease-out infinite;
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes orbit {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes ring {
+    from { transform: scale(1); opacity: 0.8; }
+    to { transform: scale(1.5); opacity: 0; }
+  }
+  @keyframes pulse-dot {
+    50% { box-shadow: 0 0 0 7px rgba(47, 208, 122, 0); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 6rem;
+    background-color: var(--color-background);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-foreground);
+    letter-spacing: -0.03em;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-accent-light);
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar { width: 12px; }
+  ::-webkit-scrollbar-track { background: #F6F7FB; }
+  ::-webkit-scrollbar-thumb {
+    background: #C9CDDD;
+    border-radius: 999px;
+    border: 3px solid #F6F7FB;
+  }
+}
+
+@layer utilities {
+  /* Grade fina do hero, sumindo nas bordas */
+  .bg-hero-grid {
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 10%, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 10%, transparent 75%);
+  }
+
+  /* Brilho azul das seções escuras */
+  .bg-dark-glow {
+    background:
+      radial-gradient(800px 400px at 85% 0%, rgba(59, 107, 255, 0.18), transparent 70%),
+      radial-gradient(600px 400px at 0% 100%, rgba(59, 107, 255, 0.1), transparent 70%);
+  }
+
+  /* Faixa de plataformas: some nas laterais */
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+
+  /* Seta dos <select> do formulário. Fica numa classe própria porque o
+     tailwind-merge confunde bg-[url(...)] com cor de fundo e descarta um dos dois. */
+  .select-arrow {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2380859A' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+  }
+
+  /* Linha tracejada vertical (jornada de recompra) */
+  .dash-line-y {
+    background: repeating-linear-gradient(var(--color-accent-line) 0 5px, transparent 5px 9px);
+  }
+}
+
+/* ===== Mobile / touch: desempenho (mesmo cuidado do site principal) ===== */
+@media (max-width: 1024px), (pointer: coarse) {
+  *,
+  *::before,
+  *::after {
+    backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Sem animação, a faixa de plataformas vira uma lista centralizada. */
+  .marquee-track {
+    width: auto !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 12px;
+    transform: none !important;
+  }
+  .marquee-dup {
+    display: none !important;
+  }
+}
+
+/* Lenis (smooth scroll) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
