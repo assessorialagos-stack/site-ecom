@@ -11,6 +11,7 @@ import { MethodSection } from "./components/MethodSection";
 import { PainSection } from "./components/PainSection";
 import { PlatformStrip } from "./components/PlatformStrip";
 import { PositioningSection } from "./components/PositioningSection";
+import { PromoBar } from "./components/PromoBar";
 import { ResultsSection } from "./components/ResultsSection";
 import { ServicesSection } from "./components/ServicesSection";
 import { TestimonialsSection } from "./components/TestimonialsSection";
@@ -24,6 +25,9 @@ import { TestimonialsSection } from "./components/TestimonialsSection";
 export default function Home() {
   return (
     <>
+      {/* Âncora do "Voltar ao topo" (o header é sticky, então não serve de alvo). */}
+      <div id="top" aria-hidden />
+      <PromoBar />
       <Header />
       <main>
         <HeroSection />

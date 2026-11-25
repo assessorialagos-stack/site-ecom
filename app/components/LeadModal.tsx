@@ -16,6 +16,7 @@ import { ArrowRight, Loader2, ShieldCheck, X } from "lucide-react";
 import { cn } from "@/app/lib/cn";
 import { whatsappLink } from "@/app/lib/contact";
 import { newEventId, trackPixel } from "@/app/lib/metaPixel";
+import { PROMO } from "@/app/lib/site";
 import { useMounted } from "@/app/lib/useMounted";
 import { Eyebrow } from "./ui/Eyebrow";
 
@@ -134,7 +135,9 @@ function buildTracking() {
 // Mensagem que abre no WhatsApp já preenchida com as respostas.
 function buildWhatsAppMessage(d: LeadData) {
   return [
-    "Olá! Quero um diagnóstico gratuito para o meu e-commerce.",
+    PROMO.active
+      ? "Olá! Vi a página da Lagos para e-commerce e tenho interesse na Promo de Natal. Quero o diagnóstico gratuito da minha loja."
+      : "Olá! Vi a página da Lagos para e-commerce e quero o diagnóstico gratuito da minha loja.",
     "",
     `*Nome:* ${d.nome}`,
     `*WhatsApp:* ${d.whatsapp}`,
@@ -199,7 +202,14 @@ function LeadDialog({ origem, onClose }: { origem: string; onClose: () => void }
       await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, ...tracking, cta: origem, event_id: eventId, _honey: honey }),
+        body: JSON.stringify({
+          ...data,
+          ...tracking,
+          cta: origem,
+          promo: PROMO.active ? PROMO.label : "",
+          event_id: eventId,
+          _honey: honey,
+        }),
         signal: ctrl.signal,
       });
       clearTimeout(timer);
@@ -240,7 +250,13 @@ function LeadDialog({ origem, onClose }: { origem: string; onClose: () => void }
         </button>
 
         <div className="px-[22px] pt-6 sm:px-[30px] sm:pt-7">
-          <Eyebrow className="mb-3.5">Diagnóstico gratuito</Eyebrow>
+          {PROMO.active ? (
+            <Eyebrow tone="promo" className="mb-3.5">
+              Diagnóstico gratuito · {PROMO.label}
+            </Eyebrow>
+          ) : (
+            <Eyebrow className="mb-3.5">Diagnóstico gratuito</Eyebrow>
+          )}
           <h3 id="lead-title" className="text-[clamp(1.5rem,3vw,1.9rem)] font-bold leading-tight">
             Vamos entender a sua loja
           </h3>

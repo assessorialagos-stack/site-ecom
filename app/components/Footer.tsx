@@ -1,7 +1,7 @@
 import { WHATSAPP_DISPLAY, whatsappLink } from "@/app/lib/contact";
-import { CONTACT_EMAIL } from "@/app/lib/site";
 import { LagosLogo } from "./ui/LagosMark";
 import { container } from "./ui/Section";
+import { WhatsAppIcon } from "./ui/SocialIcons";
 
 const nav = [
   { href: "#assessoria", label: "A assessoria" },
@@ -38,13 +38,13 @@ export function Footer() {
             <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.06em] text-white">Contato</h4>
             <ul className="grid gap-2.5">
               <li>
-                <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
-                  WhatsApp: {WHATSAPP_DISPLAY}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-white">
-                  {CONTACT_EMAIL}
+                <a
+                  href={whatsappLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                >
+                  <WhatsAppIcon size={16} className="text-whatsapp" /> {WHATSAPP_DISPLAY}
                 </a>
               </li>
               <li>Atendimento para todo o Brasil</li>

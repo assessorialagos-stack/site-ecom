@@ -1,4 +1,5 @@
-import { ChevronRight, ShieldCheck } from "lucide-react";
+import { ChevronRight, Gift, ShieldCheck } from "lucide-react";
+import { PROMO } from "@/app/lib/site";
 import { Fragment } from "react";
 import { cn } from "@/app/lib/cn";
 import { CtaButton } from "./ui/CtaButton";
@@ -20,6 +21,11 @@ export function DiagnosticBand() {
             <Waves variant="band" className="absolute inset-x-0 -bottom-5 w-full text-white/[0.08]" />
 
             <div className="relative">
+              {PROMO.active && (
+                <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-xmas px-3 py-1.5 text-[13px] font-bold text-white ring-2 ring-gold/70">
+                  <Gift size={14} className="text-gold" /> {PROMO.label}
+                </span>
+              )}
               <h2 className="text-[clamp(1.8rem,3.1vw,2.55rem)] font-bold leading-[1.08] text-white">
                 Diagnóstico gratuito da sua loja
               </h2>
@@ -47,6 +53,11 @@ export function DiagnosticBand() {
               <small className="flex items-center gap-2 text-[13.5px]">
                 <ShieldCheck size={16} /> Sem compromisso · Resposta em menos de 5h
               </small>
+              {PROMO.active && (
+                <small className="flex items-center gap-2 text-[13.5px] font-semibold text-white">
+                  <Gift size={16} className="text-gold" /> {PROMO.note}
+                </small>
+              )}
             </div>
           </div>
         </Reveal>

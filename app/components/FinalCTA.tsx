@@ -1,4 +1,6 @@
-import { Check } from "lucide-react";
+import { Check, Gift } from "lucide-react";
+import { PROMO } from "@/app/lib/site";
+import { Snowfall } from "./ui/Snowfall";
 import { whatsappLink } from "@/app/lib/contact";
 import { WA_MESSAGE } from "@/app/lib/site";
 import { CtaButton } from "./ui/CtaButton";
@@ -8,19 +10,31 @@ import { container } from "./ui/Section";
 import { WhatsAppIcon } from "./ui/SocialIcons";
 import { Waves } from "./ui/Waves";
 
-const ticks = ["Diagnóstico sem compromisso", "Resposta em menos de 5h", "Atendimento em todo o Brasil"];
+const ticks = [
+  ...(PROMO.active ? [PROMO.note] : []),
+  "Diagnóstico sem compromisso",
+  "Resposta em menos de 5h",
+  "Atendimento em todo o Brasil",
+];
 
 export function FinalCTA() {
   return (
     <section className="relative overflow-hidden bg-dark py-[clamp(80px,10vw,140px)] text-center text-dark-text">
       <div aria-hidden className="pointer-events-none absolute -top-[200px] left-1/2 h-[600px] w-[900px] -translate-x-1/2 bg-[radial-gradient(closest-side,rgba(59,107,255,0.35),transparent)]" />
+      <Snowfall tone="dark" />
       <Waves variant="band" className="absolute -bottom-2.5 -left-[5%] h-[120px] w-[110%] text-accent/[0.08]" />
 
       <div className={container}>
         <Reveal>
-          <Eyebrow tone="dark" className="mb-5">
-            Diagnóstico gratuito
-          </Eyebrow>
+          {PROMO.active ? (
+            <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-xmas px-3.5 py-1.5 text-[13.5px] font-bold text-white ring-2 ring-gold/70">
+              <Gift size={15} className="text-gold" /> {PROMO.label} · Diagnóstico gratuito
+            </span>
+          ) : (
+            <Eyebrow tone="dark" className="mb-5">
+              Diagnóstico gratuito
+            </Eyebrow>
+          )}
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mx-auto max-w-[860px] text-[clamp(2rem,4.4vw,3.6rem)] font-bold leading-[1.06] text-white">

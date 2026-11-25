@@ -38,8 +38,8 @@ export function FounderSection() {
         </Reveal>
         <Reveal delay={0.15}>
           <div className="mt-7 border-t border-border pt-6">
-            <b className="block text-[17px] text-foreground">{FOUNDER.name}</b>
-            <span className="text-sm text-muted">{FOUNDER.role}</span>
+            {FOUNDER.name && <b className="block text-[17px] text-foreground">{FOUNDER.name}</b>}
+            <span className={FOUNDER.name ? "text-sm text-muted" : "font-semibold text-foreground"}>{FOUNDER.role}</span>
           </div>
         </Reveal>
       </div>

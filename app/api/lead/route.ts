@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { LEAD_EMAIL, SITE_URL } from "@/app/lib/contact";
+import { SITE_URL } from "@/app/lib/contact";
 import { sendLeadToMeta } from "@/app/lib/metaCapi";
 
 // ── Envio dos leads por e-mail (FormSubmit) ──────────────────────────────────
@@ -13,13 +13,14 @@ import { sendLeadToMeta } from "@/app/lib/metaCapi";
 //  3. _url: os navegadores não mandam mais a URL completa; vai neste campo.
 //  4. _template=table: e-mail em tabela, legível.
 //
-// Variáveis de ambiente opcionais:
-//   FORMSUBMIT_ID    : a "random string" do e-mail de ativação (esconde o e-mail).
+// Variáveis de ambiente (Vercel → Settings → Environment Variables):
+//   LEAD_EMAIL       : e-mail que recebe os leads. Fica fora do código porque o repositório é público.
+//   FORMSUBMIT_ID    : opcional, a "random string" do e-mail de ativação (substitui o LEAD_EMAIL).
 //   LEAD_CC          : e-mail(s) que recebem cópia (separados por vírgula).
 //   LEAD_WEBHOOK_URL : encaminha o lead cru para planilha/CRM.
 //   META_CAPI_TOKEN  : token da API de Conversões (ver app/lib/metaCapi.ts).
 
-const FORMSUBMIT_ENDPOINT = process.env.FORMSUBMIT_ID?.trim() || LEAD_EMAIL;
+const FORMSUBMIT_ENDPOINT = process.env.FORMSUBMIT_ID?.trim() || process.env.LEAD_EMAIL?.trim() || "";
 const FORMSUBMIT_URL = `https://formsubmit.co/ajax/${encodeURIComponent(FORMSUBMIT_ENDPOINT)}`;
 
 type FormSubmitReply = { success?: string | boolean; message?: string };
@@ -117,6 +118,7 @@ export async function POST(request: Request) {
     Objetivo: data.objetivo || "",
     "Pode investir a partir de R$ 1.500/mês": data.investimento || "",
     "Botão clicado": data.cta || "",
+    Promo: data.promo || "",
     "Data/hora": formatarDataHora(data.data_hora),
     Origem: data.pagina_origem || "/",
     utm_source: data.utm_source || "",
@@ -139,11 +141,15 @@ export async function POST(request: Request) {
 
   // 1ª tentativa em JSON; se falhar, repete no formato de formulário HTML.
   const attempts: Attempt[] = [];
-  let attempt = await postToFormSubmit(fields, "json", referer);
-  attempts.push(attempt);
-  if (!attempt.ok) {
-    attempt = await postToFormSubmit(fields, "form", referer);
+  if (!FORMSUBMIT_ENDPOINT) {
+    console.error("LEAD_EMAIL não configurado: o lead não foi enviado por e-mail (segue pelo WhatsApp).");
+  } else {
+    let attempt = await postToFormSubmit(fields, "json", referer);
     attempts.push(attempt);
+    if (!attempt.ok) {
+      attempt = await postToFormSubmit(fields, "form", referer);
+      attempts.push(attempt);
+    }
   }
 
   const emailSent = attempts.some((a) => a.ok);

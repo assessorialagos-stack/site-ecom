@@ -31,6 +31,12 @@
   --color-dark-text: #A9AEC2;
   --color-dark-muted: #7C8297;
 
+  /* ===== Promo de Natal (acentos pontuais, o azul continua sendo a marca) ===== */
+  --color-xmas: #D92D3A;
+  --color-xmas-dark: #9E1B27;
+  --color-xmas-soft: #FFF1F2;
+  --color-gold: #F2C14E;
+
   /* ===== Estados ===== */
   --color-whatsapp: #25D366;
   --color-success: #11994A;
@@ -141,6 +147,12 @@
   }
 }
 
+/* Neve da Promo de Natal (ui/Snowfall.tsx usa via estilo inline). */
+@keyframes snow {
+  from { transform: translate3d(0, -10vh, 0); }
+  to { transform: translate3d(var(--drift, 20px), 110vh, 0); }
+}
+
 /* ===== Mobile / touch: desempenho (mesmo cuidado do site principal) ===== */
 @media (max-width: 1024px), (pointer: coarse) {
   *,
@@ -166,6 +178,10 @@
     transform: none !important;
   }
   .marquee-dup {
+    display: none !important;
+  }
+  /* Neve parada não faz sentido: some. */
+  .snowflake {
     display: none !important;
   }
 }

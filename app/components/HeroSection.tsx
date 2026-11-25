@@ -1,5 +1,7 @@
-import { Clock, MapPin, Store } from "lucide-react";
+import { Clock, Gift, MapPin, Store } from "lucide-react";
 import { cn } from "@/app/lib/cn";
+import { PROMO } from "@/app/lib/site";
+import { Snowfall } from "./ui/Snowfall";
 import { CtaButton } from "./ui/CtaButton";
 import { Eyebrow } from "./ui/Eyebrow";
 import { FounderPhoto } from "./ui/FounderPhoto";
@@ -18,12 +20,19 @@ export function HeroSection() {
         aria-hidden
         className="pointer-events-none absolute -right-[220px] -top-[160px] h-[780px] w-[780px] bg-[radial-gradient(circle,rgba(59,107,255,0.22),rgba(59,107,255,0)_62%)]"
       />
+      <Snowfall />
 
       <div className={cn(container, "z-[1] grid items-center gap-[clamp(40px,5vw,72px)] lg:grid-cols-[1.08fr_0.92fr]")}>
         {/* Texto */}
         <div>
           <Reveal>
-            <Eyebrow className="mb-5">Assessoria de marketing para e-commerce</Eyebrow>
+            {PROMO.active ? (
+              <Eyebrow tone="promo" className="mb-5">
+                {PROMO.label} · Assessoria para e-commerce
+              </Eyebrow>
+            ) : (
+              <Eyebrow className="mb-5">Assessoria de marketing para e-commerce</Eyebrow>
+            )}
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="text-[clamp(2.3rem,4.7vw,3.75rem)] font-extrabold leading-[1.02] tracking-[-0.04em]">
@@ -56,6 +65,13 @@ export function HeroSection() {
               Ver resultados
             </CtaButton>
           </Reveal>
+          {PROMO.active && (
+            <Reveal delay={0.18}>
+              <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-xmas">
+                <Gift size={16} /> {PROMO.note}
+              </p>
+            </Reveal>
+          )}
           <Reveal delay={0.2}>
             <div className="mt-[34px] flex flex-wrap gap-x-[26px] gap-y-2.5 border-t border-border pt-[26px] text-[14.5px]">
               <span className="inline-flex items-center gap-2">
@@ -79,6 +95,12 @@ export function HeroSection() {
           <div className="relative aspect-[4/5] w-full">
             <FounderPhoto showTag />
 
+            {PROMO.active && (
+              <div className="absolute -right-3 top-6 z-[5] flex rotate-[4deg] items-center gap-1.5 rounded-xl bg-xmas px-3.5 py-2 text-[13px] font-bold text-white shadow-[0_14px_30px_-12px_rgba(217,45,58,0.8)] ring-2 ring-gold/80 max-sm:-right-1.5 max-sm:top-4 max-sm:px-2.5 max-sm:text-xs">
+                <Gift size={15} className="text-gold" /> {PROMO.label}
+              </div>
+            )}
+
             <div className={cn(floatCard, "left-[-34px] top-[9%] w-[178px] max-xl:left-[-14px] max-sm:left-[-6px] max-sm:top-[6%] max-sm:w-[146px]")}>
               <div className="text-xs font-medium text-muted">Roupas de grife · 30 dias</div>
               <div className="mt-0.5 font-heading text-[26px] font-extrabold leading-tight tracking-[-0.03em] text-foreground max-sm:text-xl">
@@ -89,7 +111,7 @@ export function HeroSection() {
               </svg>
             </div>
 
-            <div className={cn(floatCard, "right-[-30px] top-[44%] w-[190px] [animation-delay:-2s] max-xl:right-[-12px] max-sm:right-[-6px] max-sm:top-[40%] max-sm:w-[150px]")}>
+            <div className={cn(floatCard, "right-[-30px] top-[44%] w-[190px] [animation-delay:-2s] max-xl:right-[-12px] max-sm:right-[-6px] max-sm:top-[57%] max-sm:w-[150px]")}>
               <div className="text-xs font-medium text-muted">Informática · 1 semana</div>
               <div className="mt-0.5 font-heading text-[26px] font-extrabold leading-tight tracking-[-0.03em] text-foreground max-sm:text-xl">
                 R$ 35 mil
@@ -100,7 +122,7 @@ export function HeroSection() {
               </div>
             </div>
 
-            <div className={cn(floatCard, "bottom-[13%] left-[-26px] flex items-center gap-3 py-3 pl-3 [animation-delay:-4s] max-xl:left-[-10px] max-sm:left-[-6px] max-sm:bottom-[14%]")}>
+            <div className={cn(floatCard, "bottom-[13%] left-[-26px] flex items-center gap-3 py-3 pl-3 [animation-delay:-4s] max-xl:left-[-10px] max-sm:left-[-6px] max-sm:bottom-[3%]")}>
               <span className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[11px] bg-success-soft text-success">
                 <PixIcon size={20} />
               </span>

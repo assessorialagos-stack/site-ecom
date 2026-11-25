@@ -26,7 +26,6 @@ export function Header() {
 
   return (
     <header
-      id="top"
       className={cn(
         "sticky top-0 z-50 border-b bg-white/85 backdrop-blur-[14px] backdrop-saturate-[1.8] transition-[border-color,box-shadow] duration-300",
         scrolled ? "border-border shadow-[0_6px_24px_-18px_rgba(16,24,40,0.35)]" : "border-transparent",

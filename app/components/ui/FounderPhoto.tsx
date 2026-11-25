@@ -8,7 +8,7 @@ import { Waves } from "./Waves";
 
 /**
  * Moldura da foto do fundador.
- * Enquanto public/fundador.png não existir, mostra o espaço vazio marcado.
+ * Enquanto a foto de FOUNDER.photo (public/fundador.jpg) não existir, mostra o espaço vazio marcado.
  * Quando a foto for salva, ela aparece sozinha (aqui e em todo lugar que usa este componente).
  */
 export function FounderPhoto({
@@ -52,7 +52,7 @@ export function FounderPhoto({
           <strong className="font-heading text-xl tracking-tight text-foreground">Seu rosto aqui</strong>
           <span className="hidden max-w-[200px] text-[13.5px] leading-snug text-body sm:block">{hint}</span>
           <code className="mt-1 rounded-lg border border-accent-line bg-white px-2.5 py-1 text-[12.5px] text-accent-hover">
-            public/fundador.png
+            public{FOUNDER.photo}
           </code>
         </div>
       )}
@@ -62,17 +62,14 @@ export function FounderPhoto({
         <img
           ref={imgRef}
           src={FOUNDER.photo}
-          alt={`${FOUNDER.name}, ${FOUNDER.role}`}
+          alt={FOUNDER.name ? `${FOUNDER.name}, ${FOUNDER.role}` : FOUNDER.role}
           onLoad={() => setStatus("ok")}
           onError={() => setStatus("missing")}
-          className={cn(
-            "absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 object-contain object-bottom",
-            !hasPhoto && "opacity-0",
-          )}
+          className={cn("absolute inset-0 h-full w-full object-cover object-[50%_35%]", !hasPhoto && "opacity-0")}
         />
       )}
 
-      {hasPhoto && showTag && (
+      {hasPhoto && showTag && FOUNDER.name && (
         <div className="absolute bottom-[18px] left-1/2 z-[3] -translate-x-1/2 whitespace-nowrap rounded-[14px] border border-white bg-white/90 px-4 py-2.5 text-center shadow-card backdrop-blur-md">
           <b className="block text-[15px] tracking-tight text-foreground">{FOUNDER.name}</b>
           <span className="text-[12.5px] text-muted">{FOUNDER.role}</span>
