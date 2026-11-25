@@ -78,7 +78,6 @@ export function LeadModalProvider({ children }: { children: React.ReactNode }) {
 
 type LeadData = {
   nome: string;
-  whatsapp: string;
   loja: string;
   plataforma: string;
   faturamento: string;
@@ -88,7 +87,6 @@ type LeadData = {
 
 const empty: LeadData = {
   nome: "",
-  whatsapp: "",
   loja: "",
   plataforma: "",
   faturamento: "",
@@ -98,25 +96,18 @@ const empty: LeadData = {
 
 const PLATAFORMAS = ["Shopify", "Nuvemshop", "Tray", "VTEX", "Loja Integrada", "WooCommerce", "Outra", "Ainda não tenho loja"];
 const FATURAMENTOS = [
-  "Ainda não fatura",
-  "Até R$ 20 mil",
-  "R$ 20 mil a R$ 50 mil",
-  "R$ 50 mil a R$ 100 mil",
-  "R$ 100 mil a R$ 300 mil",
-  "R$ 300 mil a R$ 1 milhão",
-  "Acima de R$ 1 milhão",
+  "Projeto novo",
+  "De R$ 15 mil a R$ 30 mil",
+  "De R$ 30 mil a R$ 60 mil",
+  "De R$ 60 mil a R$ 90 mil",
+  "De R$ 90 mil a R$ 150 mil",
+  "De R$ 150 mil a R$ 220 mil",
+  "Faturo acima de R$ 220 mil",
 ];
 const OBJETIVOS = ["Vender mais", "Melhorar margem e ROAS", "Aumentar a recompra", "Estruturar a operação"];
 const INVESTIMENTOS = ["Sim", "Não", "Quero entender melhor"];
 
-const fieldOrder: (keyof LeadData)[] = ["nome", "whatsapp", "loja", "plataforma", "faturamento", "objetivo", "investimento"];
-
-function maskPhone(value: string) {
-  let v = value.replace(/\D/g, "").slice(0, 11);
-  v = v.replace(/^(\d{2})(\d)/, "($1) $2");
-  v = v.replace(/(\d)(\d{4})$/, "$1-$2");
-  return v;
-}
+const fieldOrder: (keyof LeadData)[] = ["nome", "loja", "plataforma", "faturamento", "objetivo", "investimento"];
 
 function buildTracking() {
   const p = new URLSearchParams(window.location.search);
@@ -140,12 +131,11 @@ function buildWhatsAppMessage(d: LeadData) {
       : "Olá! Vi a página da Lagos para e-commerce e quero o diagnóstico gratuito da minha loja.",
     "",
     `*Nome:* ${d.nome}`,
-    `*WhatsApp:* ${d.whatsapp}`,
     `*Loja:* ${d.loja}`,
     `*Plataforma:* ${d.plataforma}`,
     `*Faturamento mensal:* ${d.faturamento}`,
     `*Objetivo:* ${d.objetivo}`,
-    `*Verba de anúncios a partir de R$ 1.500/mês:* ${d.investimento}`,
+    `*Disponibilidade de investir a partir de R$ 1.500/mês:* ${d.investimento}`,
   ].join("\n");
 }
 
@@ -167,7 +157,7 @@ function LeadDialog({ origem, onClose }: { origem: string; onClose: () => void }
   }, []);
 
   const set = (name: keyof LeadData, value: string) => {
-    setData((d) => ({ ...d, [name]: name === "whatsapp" ? maskPhone(value) : value }));
+    setData((d) => ({ ...d, [name]: value }));
     setErrors((e) => ({ ...e, [name]: false }));
   };
 
@@ -177,7 +167,7 @@ function LeadDialog({ origem, onClose }: { origem: string; onClose: () => void }
     const next: Partial<Record<keyof LeadData, boolean>> = {};
     for (const k of fieldOrder) {
       const v = data[k].trim();
-      if (!v || (k === "whatsapp" && v.replace(/\D/g, "").length < 10)) next[k] = true;
+      if (!v) next[k] = true;
     }
     setErrors(next);
     const firstErr = fieldOrder.find((k) => next[k]);
@@ -266,35 +256,19 @@ function LeadDialog({ origem, onClose }: { origem: string; onClose: () => void }
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="grid gap-3.5 px-[22px] pb-[26px] pt-[18px] sm:px-[30px] sm:pb-[30px] sm:pt-[22px]">
-          <div className="grid gap-1.5" data-field="nome">
-            <label htmlFor="f-nome" className={labelCls}>
-              Nome completo <span className="text-accent">*</span>
-            </label>
-            <input
-              ref={firstRef}
-              id="f-nome"
-              autoComplete="name"
-              placeholder="Como podemos te chamar?"
-              value={data.nome}
-              onChange={(e) => set("nome", e.target.value)}
-              className={cn(inputCls, errors.nome && errCls)}
-            />
-          </div>
-
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="grid gap-1.5" data-field="whatsapp">
-              <label htmlFor="f-wa" className={labelCls}>
-                WhatsApp <span className="text-accent">*</span>
+            <div className="grid gap-1.5" data-field="nome">
+              <label htmlFor="f-nome" className={labelCls}>
+                Nome completo <span className="text-accent">*</span>
               </label>
               <input
-                id="f-wa"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder="(00) 00000-0000"
-                value={data.whatsapp}
-                onChange={(e) => set("whatsapp", e.target.value)}
-                className={cn(inputCls, errors.whatsapp && errCls)}
+                ref={firstRef}
+                id="f-nome"
+                autoComplete="name"
+                placeholder="Como podemos te chamar?"
+                value={data.nome}
+                onChange={(e) => set("nome", e.target.value)}
+                className={cn(inputCls, errors.nome && errCls)}
               />
             </div>
             <div className="grid gap-1.5" data-field="loja">
@@ -318,7 +292,7 @@ function LeadDialog({ origem, onClose }: { origem: string; onClose: () => void }
 
           <Options label="Principal objetivo agora" name="objetivo" options={OBJETIVOS} value={data.objetivo} error={errors.objetivo} onChange={set} />
           <Options
-            label="Você consegue investir a partir de R$ 1.500/mês em anúncios, além da assessoria?"
+            label="Você tem disponibilidade de investir a partir de R$ 1.500/mês?"
             name="investimento"
             options={INVESTIMENTOS}
             value={data.investimento}
